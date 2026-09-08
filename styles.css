@@ -687,7 +687,13 @@ h1 em,h2 em,h3 em{
 .prize span{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-2)}
 .prize b{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.15rem}
 
-.wheel-wrap{position:relative;width:min(330px,80vw);aspect-ratio:1;justify-self:center}
+.wheel-wrap{
+  position:relative;
+  width:min(330px,86vw);
+  aspect-ratio:1;justify-self:center;
+  /* Permite que texto y botón se midan contra la rueda, no contra la ventana */
+  container-type:inline-size;
+}
 .wheel{
   width:100%;height:100%;border-radius:50%;position:relative;
   border:var(--borde) solid var(--tinta);
@@ -708,7 +714,10 @@ h1 em,h2 em,h3 em{
 .wheel__labels span{
   position:absolute;left:50%;top:50%;transform-origin:0 0;
   font-family:"Bricolage Grotesque",sans-serif;font-weight:700;
-  font-size:.7rem;white-space:nowrap;color:var(--tinta);
+  /* Valor de partida; app.js lo ajusta al diámetro real de la rueda */
+  font-size:11.5px;
+  letter-spacing:-.01em;
+  white-space:nowrap;color:var(--tinta);
 }
 /* radios impresos */
 .wheel::after{
@@ -732,8 +741,11 @@ h1 em,h2 em,h3 em{
 }
 .wheel__btn{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  width:82px;height:82px;border-radius:50%;
-  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:.84rem;letter-spacing:.06em;
+  /* Proporcional a la rueda: en pantallas pequenas un cubo fijo se comia el centro */
+  width:26%;aspect-ratio:1;height:auto;border-radius:50%;
+  display:grid;place-content:center;padding:0;
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.04em;
+  font-size:clamp(9px,3.8cqw,13px);line-height:1.1;
   background:var(--rojo);color:oklch(0.99 0 0);
   border:var(--borde) solid var(--tinta);
   box-shadow:3px 3px 0 var(--tinta);

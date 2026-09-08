@@ -50,6 +50,9 @@ const CONFIG = {
 
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+// Los ResizeObserver viven aquí para que nada los recoja como basura.
+const observadores = new Set();
 const store = {
   get(k)    { try { return JSON.parse(localStorage.getItem('atn_' + k)); } catch { return null; } },
   set(k, v) { try { localStorage.setItem('atn_' + k, JSON.stringify(v)); } catch {} }
@@ -184,26 +187,68 @@ function initRuleta() {
   const n = premios.length;
   const paso = 360 / n;
 
-  const RADIO = 60;
-
   premios.forEach(p => {
     const span = document.createElement('span');
     span.textContent = p.txt;
     labels.appendChild(span);
   });
+  const etiquetas = [...labels.children];
 
-  // Segunda pasada: ya conocemos el ancho de cada etiqueta, así que las de la
-  // mitad izquierda se voltean para que ninguna quede cabeza abajo.
-  [...labels.children].forEach((span, i) => {
-    const centro = i * paso + paso / 2;   // grados desde arriba, en sentido horario
-    const ang = centro - 90;
-    if (centro > 180) {
-      const w = span.offsetWidth;
-      span.style.transform = `rotate(${ang + 180}deg) translate(${-(RADIO + w)}px, -0.5em)`;
-    } else {
-      span.style.transform = `rotate(${ang}deg) translate(${RADIO}px, -0.5em)`;
-    }
-  });
+  // Las etiquetas se colocan en píxeles, así que hay que recalcularlas cada vez
+  // que la rueda cambia de tamaño. Con un radio fijo se salían del círculo en
+  // pantallas de menos de 340 px.
+  const colocarEtiquetas = () => {
+    const R = wheel.clientWidth / 2;
+    if (!R) return;
+
+    // La fuente se fija aquí y no con unidades de contenedor en CSS: aquellas se
+    // resuelven en otra pasada de layout y `offsetWidth` devolvía medidas de la
+    // fuente anterior, dejando las etiquetas descolocadas un frame.
+    const cuerpo = Math.max(8.5, Math.min(11.5, R * 0.07));
+    etiquetas.forEach(s => { s.style.fontSize = cuerpo + 'px'; });
+
+    const margen = R * 0.07;              // aire entre el texto y el borde
+    const anchoMayor = Math.max(...etiquetas.map(s => s.offsetWidth));
+    // Arranca a un tercio del radio; si el texto no cabe, se acerca al centro
+    // antes que desbordar. El cubo del botón ocupa el 26% central.
+    const radio = Math.min(R * 0.32, Math.max(R * 0.17, R - margen - anchoMayor));
+
+    etiquetas.forEach((span, i) => {
+      const centro = i * paso + paso / 2;   // grados desde arriba, en sentido horario
+      const ang = centro - 90;
+      // Las de la mitad izquierda se voltean para que ninguna quede cabeza abajo.
+      span.style.transform = centro > 180
+        ? `rotate(${ang + 180}deg) translate(${-(radio + span.offsetWidth)}px, -0.5em)`
+        : `rotate(${ang}deg) translate(${radio}px, -0.5em)`;
+    });
+  };
+
+  colocarEtiquetas();
+
+  // Al girar el teléfono el círculo cambia de tamaño y las posiciones ya no valen.
+  // Se recalcula en el acto (son ocho elementos) y se repite un instante después
+  // por si el layout todavía se estaba asentando.
+  let asentar = 0;
+  const reubicar = () => {
+    colocarEtiquetas();
+    clearTimeout(asentar);
+    asentar = setTimeout(colocarEtiquetas, 150);
+  };
+
+  // El observador se guarda en `observadores`: creado al vuelo con
+  // `new ResizeObserver(...).observe(x)` nadie lo referencia y el recolector
+  // de basura puede llevárselo, con lo que deja de avisar de los cambios.
+  const observador = new ResizeObserver(reubicar);
+  observador.observe(wheel);
+  observadores.add(observador);
+
+  // Respaldo por si el observador no llega a dispararse en algún navegador.
+  addEventListener('resize', reubicar, { passive: true });
+  addEventListener('orientationchange', reubicar);
+
+  // Bricolage Grotesque llega después del primer render: los anchos medidos con
+  // la tipografía de respaldo dejan torcidas las etiquetas de la izquierda.
+  document.fonts?.ready.then(colocarEtiquetas);
 
   const ganador = () => {
     const total = premios.reduce((a, p) => a + p.peso, 0);
