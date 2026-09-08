@@ -19,11 +19,15 @@ site.webmanifest    icono de app
 
 ## Publicado en
 
-https://www.atnova.fun/
+**https://www.atnova.fun** — con certificado Let's Encrypt y HTTPS forzado.
 
-El `canonical`, `og:image`, `og:url`, el JSON-LD y el `sitemap.xml` ya apuntan ahi.
-Si el sitio se mueve a un dominio propio hay que actualizar esos cinco puntos y
-crear un archivo `CNAME`.
+DNS gestionado en Hostinger: `CNAME www -> snzxvss.github.io` mas cuatro registros
+`A` en el apex hacia las IP de GitHub Pages. El archivo `CNAME` del repositorio es
+lo que le dice a Pages que sirva este dominio: si se borra, el sitio vuelve a
+`snzxvss.github.io/atnova`.
+
+El certificado lo renueva GitHub automaticamente. `atnova.fun`, `http://` y la URL
+antigua de github.io redirigen todos a `https://www.atnova.fun/`.
 
 ## Publicar en GitHub Pages
 
