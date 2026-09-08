@@ -19,7 +19,7 @@ site.webmanifest    icono de app
 
 ## Publicado en
 
-https://snzxvss.github.io/atnova/
+https://www.atnova.fun/
 
 El `canonical`, `og:image`, `og:url`, el JSON-LD y el `sitemap.xml` ya apuntan ahi.
 Si el sitio se mueve a un dominio propio hay que actualizar esos cinco puntos y
