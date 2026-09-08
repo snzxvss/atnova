@@ -1,0 +1,12 @@
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Herramientas
+.playwright-mcp/
+node_modules/
+
+# Nunca subir credenciales
+*token*.txt
+.env
