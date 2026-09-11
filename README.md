@@ -2,10 +2,17 @@
 
 Sitio estático. Sin build: se sube tal cual y funciona.
 
-**Posicionamiento:** el producto principal es el asistente de pedidos por WhatsApp y el
-panel donde el cliente ve lo que capturó. La página web es un servicio de soporte para
-que lo encuentren, no la fuente de datos del asistente. El orden de las secciones refleja
-esa jerarquía.
+**Posicionamiento:** AT Nova hace **software a la medida para negocios pequeños**, y el
+asistente de pedidos por WhatsApp con su panel es su producto más definido, no lo único.
+El abanico se lee en `#servicios` y va de lo hecho a lo que se cotiza: asistente → panel
+→ conexión con el punto de venta del negocio → páginas web → desarrollo a medida. La web
+es un servicio para que encuentren al negocio, no la fuente de datos del asistente.
+
+Los **cuatro rubros modelados** que se citan en la web salen de `atnova-flows/contratos/`
+(`restaurante-pos`, `clinica-odontologia`, `tienda-variedades`, `servicios-cotizacion`) y
+los detalles de cada uno —domicilio, elegir profesional, talla y color, unidad de
+medida— son interruptores y atributos reales de esos archivos. Si se añade un rubro,
+actualizar la tarjeta 05 y el plan «A la medida».
 
 **Regla de contenido:** la landing no promete nada que el producto no haga hoy. Lo que
 está fuera de alcance en `atnova-flows/docs/01-vision-y-alcance.md` no se menciona:
