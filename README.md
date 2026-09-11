@@ -2,9 +2,15 @@
 
 Sitio estático. Sin build: se sube tal cual y funciona.
 
-**Posicionamiento:** el producto principal son los asistentes de WhatsApp con IA y las
-integraciones de IA. La página web es un servicio de soporte que alimenta al asistente,
-no el eje del negocio. El orden de servicios, planes, casos y métricas refleja esa jerarquía.
+**Posicionamiento:** el producto principal es el asistente de pedidos por WhatsApp y el
+panel donde el cliente ve lo que capturó. La página web es un servicio de soporte para
+que lo encuentren, no la fuente de datos del asistente. El orden de las secciones refleja
+esa jerarquía.
+
+**Regla de contenido:** la landing no promete nada que el producto no haga hoy. Lo que
+está fuera de alcance en `atnova-flows/docs/01-vision-y-alcance.md` no se menciona:
+canales distintos de WhatsApp, app móvil, que el cliente edite sus propios flujos,
+mensajes fuera de la ventana de 24 h (plantillas de Meta) y cobro dentro del producto.
 
 ## Estructura
 
@@ -64,22 +70,27 @@ Para una versión sobria: `contador: { modo:'fecha', hasta:'2026-09-30T23:59:59-
 
 | Plan | Antes | Ahora | Plazo |
 |---|---|---|---|
-| Responde | $590.000 | $290.000 + $99.000/mes | 4 días hábiles |
-| Responde + Web | $990.000 | $490.000 (3 meses de IA incluidos) | 7 días hábiles |
-| Vende | $1.450.000 | $700.000 (3 meses de IA incluidos) | 12 días hábiles |
-| Automatiza | — | Cotización en 24 h | Entregas quincenales |
+| Responde | $590.000 | $290.000 + mensualidad | 4 días hábiles |
+| Responde + Web | $990.000 | $490.000 (3 meses de mensualidad incluidos) | 7 días hábiles |
+| Conecta | $1.450.000 | $700.000 (3 meses de mensualidad incluidos) | 12 días hábiles |
+| A la medida | — | Cotización en 24 h | Entregas quincenales |
 
-Add-ons: 3.000 conversaciones extra $99.000/mes · hosting y soporte $39.000/mes ·
-reentrenamiento mensual del bot $149.000/mes.
+La mensualidad va por conversaciones atendidas, según D-034 de `atnova-flows`:
+$79.000 (100) · $179.000 (250) · $349.000 (500) · $690.000 (1.000). No hay plan
+ilimitado: con el cobro por mensaje, un cliente hablador cuesta diez veces más que uno
+callado y quien lo decide no es el negocio sino sus clientes.
+
+Add-on: hosting y soporte de la web $39.000/mes.
 
 Los plazos cuentan días hábiles desde que el cliente entrega su lista de precios y sus
 preguntas frecuentes, y se pausan durante las aprobaciones.
 
-**Ojo con el margen:** el consumo de la API de WhatsApp que cobra Meta va aparte
-($60.000–$120.000/mes típico para un negocio pequeño) y está declarado en las FAQ para
-que no aparezca como sorpresa en la primera factura. Desde el 1 de octubre de 2026 Meta
-cobra por mensaje entregado, no por conversación: conviene revisar la mensualidad contra
-el volumen real antes de firmar contratos largos.
+**Ojo con el margen:** desde el 1 de octubre de 2026 Meta cobra por mensaje entregado y
+las respuestas del bot dejan de ser gratis. El consumo va dentro de la mensualidad, así
+que el plan es el que tiene que cubrirlo: una conversación cuesta unos 300 COP de media
+y un pedido completo unos 410. Los números y su origen están en
+`atnova-flows/docs/18-costes-y-precios.md`; cualquier cambio de tarifa se refleja aquí
+antes que en la web.
 
 ## Imágenes
 
@@ -107,7 +118,16 @@ equipo (1600×1000). Con esas dos se monta la franja de confianza antes del form
 
 ## Contenido que sigue siendo de relleno
 
-Los nombres de empresa de los casos, los tres testimonios, «38 asistentes», «4.9/5»,
-«12.400 conversaciones» y «68% resueltas sin intervenir» son inventados. Reemplazarlos por
-datos reales antes de hacer campaña paga: en Colombia la SIC sanciona la publicidad
-engañosa y un testimonio atribuido a una empresa concreta califica como tal.
+Los testimonios, las métricas inventadas («38 asistentes», «4.9/5», «12.400
+conversaciones», «68% resueltas sin intervenir») y los KPIs de los casos se retiraron: en
+Colombia la SIC sanciona la publicidad engañosa y un testimonio atribuido a una empresa
+concreta califica como tal. Las secciones que los sostenían se reescribieron con lo que
+el producto hace hoy.
+
+Siguen siendo ficticios, y hay que decidir si se quedan: los avisos de actividad
+(`toasts` en `app.js`) inventan personas y negocios que acaban de contratar, y los cupos
+y el contador de `CONFIG` no corresponden a una disponibilidad real. Se apagan con
+`toasts.activo: false` y `contador.modo: 'fecha'`.
+
+La imagen social (`assets/og-image.png`, generada por `.og-image.ps1`) todavía dice
+«IA DESDE $290.000» y «Chatbots con IA»: hay que regenerarla con el mensaje nuevo.

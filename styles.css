@@ -224,6 +224,19 @@ h1 em,h2 em,h3 em{
 }
 .hdr__nav a:hover::after{transform:scaleX(1)}
 .hdr__end{display:flex;align-items:center;gap:.7rem}
+/* Acceso de cliente: legible y tocable, pero deliberadamente por debajo del
+   botón verde en peso visual. No es la acción que buscamos de un visitante nuevo. */
+.hdr__panel{
+  display:inline-flex;align-items:center;
+  padding:.55em .95em;min-height:40px;
+  font-family:"Bricolage Grotesque",sans-serif;
+  font-weight:700;font-size:.85rem;letter-spacing:-.01em;white-space:nowrap;
+  color:var(--tinta-2);
+  border:1.5px solid color-mix(in oklch,var(--tinta) 30%,transparent);
+  border-radius:var(--r);
+  transition:color .16s,border-color .16s,background .16s;
+}
+.hdr__panel:hover{color:var(--tinta);border-color:var(--tinta);background:var(--papel-2)}
 .burger{
   display:none;width:40px;height:40px;font-size:1.2rem;
   align-items:center;justify-content:center;cursor:pointer;
@@ -1043,8 +1056,9 @@ h1 em,h2 em,h3 em{
   /* Sin la maqueta web al lado, el chat ya no tiene por qué ir a la izquierda */
   .chat{margin-inline:auto;max-width:400px}
   .sticker{right:0}
-}
-@media (max-width:767px){
+
+  /* El menú pasa a hamburguesa ya en tableta: con el acceso al panel dentro,
+     la barra en una sola línea deja de caber a 768 y los rótulos se parten. */
   .hdr__nav{
     position:absolute;top:100%;left:0;right:0;
     flex-direction:column;gap:0;
@@ -1060,7 +1074,13 @@ h1 em,h2 em,h3 em{
   .hdr__nav.is-open>a:last-child{border-bottom:0;margin-bottom:.6rem}
   .burger{display:flex}
   .hide-sm{display:none}
-
+}
+@media (max-width:420px){
+  /* Con el logo y la hamburguesa el rótulo va justo: se aprieta, no se esconde */
+  .hdr__panel{padding-inline:.7em;font-size:.8rem}
+  .hdr__in{gap:.7rem}
+}
+@media (max-width:767px){
   .stamp--b{display:none}
   .sticker{
     position:relative;right:auto;bottom:auto;
