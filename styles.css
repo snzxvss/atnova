@@ -202,7 +202,14 @@ h1 em,h2 em,h3 em{
   animation:corre 38s linear infinite;
 }
 .ticker__track:hover{animation-play-state:paused}
-.ticker b{font-size:.62rem;opacity:.75}
+/* El separador es el glifo de WhatsApp, no un asterisco.
+   Va como icono del sprite y no como imagen: **hereda el blanco del texto**,
+   asi que el dia que cambie el rojo de la cinta no hay ningun archivo que
+   regenerar. A 14 px la silueta se reconoce; por debajo de 12 es una mancha.
+   Con algo menos de opacidad para que marque el ritmo sin competir con lo que
+   de verdad hay que leer. */
+.ticker__sep{display:inline-flex;align-items:center;opacity:.7}
+.ticker__sep .ic{width:14px;height:14px;fill:currentColor}
 @keyframes corre{to{transform:translateX(-50%)}}
 
 /* =========== HEADER =========== */
@@ -1112,3 +1119,65 @@ h1 em,h2 em,h3 em{
   .cdown>div{min-width:52px;padding:.4rem .25rem}
   .cdown b{font-size:1.3rem}
 }
+
+/* =========== MARCAS =========== */
+.marcas{
+  padding-block:clamp(1.6rem,3.5vw,2.4rem);
+  background:var(--papel-2);
+  border-block:var(--borde) solid var(--tinta);
+  overflow:hidden;
+}
+.marcas__txt{
+  margin:0 auto clamp(1rem,2.5vw,1.4rem);
+  max-width:44ch;padding-inline:1.2rem;text-align:center;
+  font-family:"Bricolage Grotesque",sans-serif;
+  font-weight:700;font-size:clamp(.78rem,1.6vw,.9rem);
+  letter-spacing:.02em;line-height:1.4;
+  color:var(--tinta-2);
+  text-wrap:balance;
+}
+.marcas__cinta{
+  overflow:hidden;
+  /* Se desvanece por los lados en vez de cortar en seco: sin esto, un logo
+     partido por la mitad en el borde parece un fallo de maquetacion. */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.marcas__tira{
+  display:flex;align-items:center;gap:clamp(2.4rem,6vw,4.5rem);
+  width:max-content;
+  animation:desfila 42s linear infinite;
+}
+.marcas__tira:hover{animation-play-state:paused}
+.marcas__l{display:inline-flex;align-items:center;color:var(--tinta)}
+.marcas__l svg{
+  /* Alto fijo y ancho libre: los logos tienen proporciones distintas y
+     encajarlos todos en un cuadrado deja unos enormes y otros diminutos. */
+  height:clamp(20px,3.2vw,26px);width:auto;
+  fill:currentColor;
+  opacity:.72;
+  transition:opacity .16s;
+}
+.marcas__l:hover svg{opacity:1}
+
+/* Cada marca lleva su propio viewBox recortado a su dibujo (ver index.html).
+   Sin eso, un logotipo con palabra como WooCommerce ocupa una franja de 4,85
+   sobre 24 dentro del lienzo cuadrado, y fijar la altura del LIENZO deja las
+   letras a un quinto del tamano del resto. Con el lienzo ajustado, esta unica
+   regla vale para todos: mismo alto de dibujo, ancho el que le toque. */
+@keyframes desfila{to{transform:translateX(-50%)}}
+
+/* Quieto para quien pide menos movimiento. La cinta roja de arriba y esta
+   comparten esta regla al final del archivo, donde gana. */
+@media (prefers-reduced-motion:reduce){
+  .marcas__tira,.ticker__track{animation:none}
+  .marcas__cinta{overflow-x:auto}
+}
+
+/* Igualar la ALTURA hace que un logotipo con palabra domine la fila: a 26 px
+   WooCommerce mide 130 de ancho y pesa cinco veces mas que un glifo. Lo que se
+   iguala es el area optica, asi que cuanto mas ancho, mas bajo. Los numeros
+   salen de la relacion de cada dibujo, medida y anotada en index.html. */
+.marcas__l--w2 svg{height:clamp(18px,2.9vw,23px)}   /* Meta, Mercado Pago */
+.marcas__l--w3 svg{height:clamp(14px,2.2vw,18px)}   /* Wix */
+.marcas__l--w4 svg{height:clamp(11px,1.7vw,14px)}   /* WooCommerce */
